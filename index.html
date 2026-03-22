@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Q — Kozmička Meditacija</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@300;400&family=Playfair+Display:ital,wght@0,300;1,300;1,400&family=Josefin+Sans:wght@100;200;300&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --gold:   #d4a844;
+  --gold2:  rgba(210,175,100,0.55);
+  --text:   rgba(240,232,210,0.92);
+  --muted:  rgba(200,175,130,0.45);
+  --bg:     #080412;
+}
+
+html, body {
+  width:100%; height:100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Josefin Sans', sans-serif;
+  overflow: hidden;
+}
+
+/* ── star canvas ── */
+#stars { position:fixed; inset:0; z-index:0; pointer-events:none; }
+#twinkle { position:fixed; inset:0; z-index:1; pointer-events:none; }
+
+/* ══════════════════════════════════════
+   SCREENS
+══════════════════════════════════════ */
+.screen {
+  position: fixed; inset:0; z-index:10;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: fadeIn .8s ease forwards;
+}
+.screen.active { display:flex; }
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(10px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* ══════════════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════════════ */
+
+/* Cinzel label */
+.label {
+  font-family: 'Cinzel', serif; font-weight:400;
+  font-size: .82rem; letter-spacing:.5em; text-transform:uppercase;
+  color: var(--gold2);
+}
+
+/* Gold divider */
+.divider {
+  display:flex; align-items:center; gap:.55rem;
+  width: min(260px,65vw);
+}
+.d-line { flex:1; height:1px; background:linear-gradient(90deg,transparent,rgba(210,175,100,0.4),transparent); }
+.d-dot  { width:4px;height:4px;background:rgba(210,175,100,0.65);transform:rotate(45deg);flex-shrink:0; }
+.d-sm   { width:3px;height:3px;background:rgba(210,175,100,0.3);transform:rotate(45deg);flex-shrink:0; }
+
+/* Ghost button */
+.btn-ghost {
+  background: transparent;
+  border: 1px solid rgba(210,175,100,0.38);
+  color: rgba(220,190,130,0.75);
+  font-family: 'Josefin Sans', sans-serif; font-weight:200;
+  font-size:.78rem; letter-spacing:.38em; text-transform:uppercase;
+  padding:1.1rem 2.6rem; cursor:pointer; border-radius:1px;
+  transition: all .35s ease;
+}
+.btn-ghost:hover, .btn-ghost:active {
+  border-color:rgba(210,175,100,0.75);
+  color:rgba(240,210,150,1);
+  background:rgba(210,175,100,0.06);
+}
+
+/* Small text button */
+.btn-text {
+  background:transparent; border:none;
+  font-family:'Josefin Sans',sans-serif; font-weight:200;
+  font-size:.55rem; letter-spacing:.3em; text-transform:uppercase;
+  color:rgba(200,175,130,0.4); cursor:pointer;
+  transition: color .3s;
+}
+.btn-text:hover { color:rgba(200,175,130,0.75); }
+
+/* ══════════════════════════════════════
+   SCREEN 1 — LANDING
+══════════════════════════════════════ */
+#s-landing { gap:0; }
+
+.landing-label {
+  font-family:'Cinzel',serif; font-weight:300;
+  font-size:1rem; letter-spacing:.45em; text-transform:uppercase;
+  color:var(--gold2); margin-bottom:1.8rem;
+  animation: up 1s ease forwards; opacity:0; animation-delay:.2s;
+}
+
+/* logo frame */
+.logo-frame {
+  position:relative;
+  width: min(340px, 72vw);
+  aspect-ratio:1;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:1.8rem;
+  animation: up 1.2s ease forwards; opacity:0; animation-delay:.4s;
+}
+.ring { position:absolute; border-radius:50%; }
+.r1 { inset:0;   border:1px solid rgba(210,175,100,0.52); animation:spin 70s linear infinite; }
+.r2 { inset:10%; border:1px solid rgba(170,120,210,0.38); animation:spin 50s linear infinite reverse; }
+.r3 { inset:20%; border:1px solid rgba(110,155,225,0.30); animation:spin 35s linear infinite; }
+.r4 { inset:30%; border:1px solid rgba(210,175,100,0.18); }
+
+.r1::before,.r1::after { content:'';position:absolute;background:rgba(210,175,100,0.9); }
+.r1::before { width:13px;height:1.5px;top:calc(50% - .75px);left:-7px; }
+.r1::after  { width:13px;height:1.5px;top:calc(50% - .75px);right:-7px; }
+.r2::before,.r2::after { content:'';position:absolute;background:rgba(170,120,210,0.75); }
+.r2::before { width:1.5px;height:10px;left:calc(50% - .75px);top:-5px; }
+.r2::after  { width:1.5px;height:10px;left:calc(50% - .75px);bottom:-5px; }
+.r3::before,.r3::after { content:'';position:absolute;background:rgba(110,155,225,0.6); }
+.r3::before { width:8px;height:1px;top:calc(50% - .5px);left:-4px; }
+.r3::after  { width:8px;height:1px;top:calc(50% - .5px);right:-4px; }
+
+@keyframes spin { from{transform:rotate(0)}to{transform:rotate(360deg)} }
+
+.dl { position:absolute;width:100%;height:1px;top:50%;left:0; }
+.dl1 { background:rgba(210,175,100,0.06); }
+.dl2 { background:rgba(170,120,210,0.05); transform:rotate(45deg); }
+.dl3 { background:rgba(110,155,225,0.05); transform:rotate(90deg); }
+.dl4 { background:rgba(210,175,100,0.04); transform:rotate(135deg); }
+
+.corner { position:absolute; width:12%; }
+.corner svg { width:100%; height:100%; display:block; }
+.c-tl{top:4%;left:4%;}
+.c-tr{top:4%;right:4%;transform:rotate(90deg);}
+.c-bl{bottom:4%;left:4%;transform:rotate(270deg);}
+.c-br{bottom:4%;right:4%;transform:rotate(180deg);}
+
+.rdot { position:absolute; border-radius:50%; width:4px;height:4px; }
+
+.q-big {
+  font-family:'Cinzel',serif; font-weight:400;
+  font-size: min(138px,27vw);
+  line-height:1; letter-spacing:.04em;
+  color:transparent;
+  background:linear-gradient(150deg,#a07828 0%,#d4a844 25%,#f8d878 50%,#d4a844 75%,#a07828 100%);
+  -webkit-background-clip:text; background-clip:text;
+  position:relative; z-index:5;
+  filter:drop-shadow(0 0 28px rgba(210,168,60,0.42)) drop-shadow(0 0 80px rgba(170,118,28,0.15));
+  animation:qglow 5s ease-in-out infinite;
+}
+@keyframes qglow {
+  0%,100%{filter:drop-shadow(0 0 25px rgba(210,168,60,0.38)) drop-shadow(0 0 70px rgba(170,118,28,0.12));}
+  50%    {filter:drop-shadow(0 0 44px rgba(210,168,60,0.62)) drop-shadow(0 0 110px rgba(170,118,28,0.26));}
+}
+
+.landing-name {
+  font-family:'Cinzel',serif; font-weight:300;
+  font-size:clamp(.48rem,1.2vw,.62rem); letter-spacing:.6em; text-transform:uppercase;
+  color:var(--gold2); margin-bottom:1.5rem;
+  animation:up 1.4s ease forwards; opacity:0; animation-delay:.6s;
+}
+.landing-divider {
+  margin-bottom:1.5rem;
+  animation:up 1.4s ease forwards; opacity:0; animation-delay:.7s;
+}
+.landing-btn {
+  animation:up 1.8s ease forwards; opacity:0; animation-delay:.9s;
+}
+
+@keyframes up {
+  from{opacity:0;transform:translateY(12px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+
+/* ══════════════════════════════════════
+   SCREEN 2 — SELECT MEDITATION
+══════════════════════════════════════ */
+#s-select { gap:1.4rem; }
+
+.q-small {
+  font-family:'Cinzel',serif; font-weight:400;
+  font-size:3rem; line-height:1; letter-spacing:.04em;
+  color:transparent;
+  background:linear-gradient(150deg,#a07828,#d4a844,#f8d878,#d4a844,#a07828);
+  -webkit-background-clip:text; background-clip:text;
+  filter:drop-shadow(0 0 15px rgba(210,168,60,0.4));
+}
+
+.select-title {
+  font-family:'Playfair Display',serif; font-style:italic; font-weight:300;
+  font-size:clamp(1rem,2.8vw,1.25rem);
+  color:rgba(240,232,210,0.7); text-align:center;
+}
+
+.cards {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:.8rem; width:100%; max-width:440px;
+}
+.card {
+  background:rgba(255,255,255,0.025);
+  border:1px solid rgba(210,175,100,0.12);
+  border-radius:2px; padding:1.5rem 1.1rem;
+  cursor:pointer; text-align:center;
+  display:flex; flex-direction:column; gap:.5rem; align-items:center;
+  transition:all .35s ease;
+}
+.card:hover, .card:active {
+  background:rgba(210,175,100,0.06);
+  border-color:rgba(210,175,100,0.38);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(100,40,160,0.25);
+}
+.card-icon { display:flex; align-items:center; justify-content:center; }
+.planet-img-wrap {
+  position: relative;
+  width: 68px; height: 68px;
+  border-radius: 50%;
+  overflow: visible;
+  display: flex; align-items:center; justify-content:center;
+}
+.planet-img {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.88) saturate(1.1);
+  transition: filter .4s ease;
+  position: relative; z-index:1;
+}
+.card:hover .planet-img {
+  filter: brightness(1.05) saturate(1.2);
+}
+.planet-glow {
+  position: absolute; inset: -8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--gc) 0%, transparent 70%);
+  z-index: 0;
+  animation: planetPulse 3s ease-in-out infinite;
+}
+@keyframes planetPulse {
+  0%,100% { opacity:.6; transform:scale(1); }
+  50%      { opacity:1;  transform:scale(1.08); }
+}
+.card-name {
+  font-family:'Cinzel',serif; font-weight:500;
+  font-size:.92rem; letter-spacing:.18em; text-transform:uppercase;
+  color:rgba(220,185,110,0.95);
+}
+.card-desc {
+  font-family:'Playfair Display',serif; font-style:italic;
+  font-size:.98rem; color:rgba(210,195,165,0.75); line-height:1.6;
+}
+
+/* ══════════════════════════════════════
+   SCREEN 3 — DURATION
+══════════════════════════════════════ */
+#s-duration { gap:1.6rem; }
+
+.session-name {
+  font-family:'Cinzel',serif; font-weight:400;
+  font-size:clamp(1.6rem,5vw,2.4rem);
+  color:transparent;
+  background:linear-gradient(150deg,#a07828,#d4a844,#f8d878,#d4a844,#a07828);
+  -webkit-background-clip:text; background-clip:text;
+  filter:drop-shadow(0 0 15px rgba(210,168,60,0.3));
+}
+
+.dur-row { display:flex; gap:.6rem; flex-wrap:wrap; justify-content:center; }
+.dur-btn {
+  background:transparent; border:1px solid rgba(210,175,100,0.2);
+  color:rgba(210,175,100,0.45);
+  font-family:'Josefin Sans',sans-serif; font-weight:200;
+  font-size:.85rem; letter-spacing:.2em; text-transform:uppercase;
+  padding:.85rem 1.6rem; cursor:pointer; border-radius:1px;
+  transition:all .3s;
+}
+.dur-btn:hover,.dur-btn.active {
+  border-color:rgba(210,175,100,0.65); color:rgba(210,175,100,0.95);
+  background:rgba(210,175,100,0.06);
+}
+
+/* ══════════════════════════════════════
+   SCREEN 4 — MEDITATION
+══════════════════════════════════════ */
+#s-meditate { gap:1.3rem; justify-content:center; }
+
+/* ── ORB ── */
+.orb-wrap {
+  position:relative;
+  width: min(200px,50vw);
+  height: min(200px,50vw);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.orb-ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(210,175,100,0.12);
+  animation:orbRing 4s ease-in-out infinite;
+}
+.orb-ring:nth-child(1){inset:0;              animation-delay:0s;}
+.orb-ring:nth-child(2){inset:14%;            animation-delay:.5s;border-color:rgba(150,90,220,0.15);}
+.orb-ring:nth-child(3){inset:28%;            animation-delay:1s;}
+@keyframes orbRing{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.9;transform:scale(1.04)}}
+
+.orb-core {
+  width:42%; height:42%; border-radius:50%; position:relative; z-index:2;
+  background:radial-gradient(circle at 32% 32%,
+    rgba(180,120,255,0.9),
+    rgba(100,40,200,0.7),
+    rgba(40,10,90,0.5));
+  box-shadow:
+    0 0 30px rgba(150,80,240,0.55),
+    0 0 70px rgba(100,40,200,0.28),
+    inset 0 0 20px rgba(220,190,255,0.1);
+  animation:orbCore 4s ease-in-out infinite;
+}
+@keyframes orbCore{
+  0%,100%{transform:scale(1);box-shadow:0 0 28px rgba(150,80,240,0.5),0 0 65px rgba(100,40,200,0.25);}
+  50%    {transform:scale(1.1);box-shadow:0 0 50px rgba(150,80,240,0.8),0 0 110px rgba(100,40,200,0.45);}
+}
+
+/* plasma swirl inside orb */
+.orb-plasma {
+  position:absolute; inset:0; border-radius:50%; overflow:hidden; z-index:3; opacity:.6;
+}
+.orb-plasma canvas { width:100%; height:100%; }
+
+/* ── meditation text ── */
+.med-box {
+  width:100%; max-width:480px;
+  background:rgba(255,255,255,0.018);
+  border:1px solid rgba(210,175,100,0.08);
+  border-radius:2px; padding:1.4rem 1.8rem;
+  text-align:center; min-height:90px;
+  display:flex; align-items:center; justify-content:center;
+}
+.med-text {
+  font-family:'Playfair Display',serif; font-style:italic; font-weight:300;
+  font-size:clamp(.95rem,2.2vw,1.12rem);
+  color:rgba(230,218,195,0.9); line-height:1.9;
+  opacity:0; transition:opacity 1.4s ease;
+}
+.med-text.show { opacity:1; }
+.dots { display:none; gap:5px; align-items:center; justify-content:center; }
+.dots.show { display:flex; }
+.dots span {
+  width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:.3;
+  animation:dot 1.4s ease-in-out infinite;
+}
+.dots span:nth-child(2){animation-delay:.2s;}
+.dots span:nth-child(3){animation-delay:.4s;}
+@keyframes dot{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+/* progress */
+.prog-track {
+  width:100%;max-width:360px;height:1px;
+  background:rgba(255,255,255,0.06); position:relative;
+}
+.prog-fill {
+  height:100%; width:0%; transition:width 1s linear;
+  background:linear-gradient(90deg,rgba(100,40,200,0.7),rgba(210,175,100,0.7));
+  box-shadow:0 0 8px rgba(210,175,100,0.4);
+}
+.timer {
+  font-family:'Josefin Sans',sans-serif; font-weight:100;
+  font-size:.9rem; letter-spacing:.3em; color:rgba(210,175,100,0.4);
+}
+.med-controls { display:flex; gap:1.2rem; }
+.ctrl {
+  background:transparent; border:1px solid rgba(255,255,255,0.1);
+  color:rgba(200,175,130,0.45);
+  font-family:'Josefin Sans',sans-serif; font-weight:200;
+  font-size:.55rem; letter-spacing:.22em; text-transform:uppercase;
+  padding:.5rem 1.2rem; cursor:pointer; border-radius:1px;
+  transition:all .3s;
+}
+.ctrl:hover{border-color:rgba(210,175,100,0.55);color:rgba(210,175,100,0.9);}
+.ctrl.danger:hover{border-color:rgba(180,60,60,0.7);color:rgba(220,100,100,0.9);}
+
+/* ══════════════════════════════════════
+   SCREEN 5 — COMPLETE
+══════════════════════════════════════ */
+#s-complete { gap:1.6rem; }
+.complete-q {
+  font-family:'Cinzel',serif; font-weight:400; font-size:3rem;
+  color:transparent;
+  background:linear-gradient(150deg,#a07828,#d4a844,#f8d878,#d4a844,#a07828);
+  -webkit-background-clip:text; background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(210,168,60,0.4));
+}
+.complete-title {
+  font-family:'Playfair Display',serif; font-style:italic; font-weight:300;
+  font-size:clamp(1.1rem,3vw,1.5rem); color:rgba(240,232,210,0.85); text-align:center;
+}
+.complete-msg {
+  font-family:'Playfair Display',serif; font-style:italic; font-weight:300;
+  font-size:clamp(.85rem,2vw,1rem);
+  color:rgba(210,175,100,0.55); text-align:center; line-height:2;
+  max-width:380px;
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+<canvas id="twinkle"></canvas>
+
+<!-- ══ S1: LANDING ══ -->
+<div class="screen active" id="s-landing">
+  <p class="landing-label">Kozmička meditacija</p>
+
+  <div class="logo-frame">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+    <div class="ring r4"></div>
+    <div class="dl dl1"></div><div class="dl dl2"></div>
+    <div class="dl dl3"></div><div class="dl dl4"></div>
+
+    <div class="corner c-tl"><svg viewBox="0 0 36 36" fill="none"><path d="M2 34L2 2L34 2" stroke="rgba(210,175,100,0.6)" stroke-width="1"/><path d="M2 14L10 14" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><path d="M14 2L14 10" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><circle cx="2" cy="2" r="2" fill="rgba(210,175,100,0.75)"/></svg></div>
+    <div class="corner c-tr"><svg viewBox="0 0 36 36" fill="none"><path d="M2 34L2 2L34 2" stroke="rgba(210,175,100,0.6)" stroke-width="1"/><path d="M2 14L10 14" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><path d="M14 2L14 10" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><circle cx="2" cy="2" r="2" fill="rgba(210,175,100,0.75)"/></svg></div>
+    <div class="corner c-bl"><svg viewBox="0 0 36 36" fill="none"><path d="M2 34L2 2L34 2" stroke="rgba(210,175,100,0.6)" stroke-width="1"/><path d="M2 14L10 14" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><path d="M14 2L14 10" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><circle cx="2" cy="2" r="2" fill="rgba(210,175,100,0.75)"/></svg></div>
+    <div class="corner c-br"><svg viewBox="0 0 36 36" fill="none"><path d="M2 34L2 2L34 2" stroke="rgba(210,175,100,0.6)" stroke-width="1"/><path d="M2 14L10 14" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><path d="M14 2L14 10" stroke="rgba(210,175,100,0.35)" stroke-width=".7"/><circle cx="2" cy="2" r="2" fill="rgba(210,175,100,0.75)"/></svg></div>
+
+    <div class="rdot" style="top:-.5%;left:47%;background:rgba(210,175,100,.8);box-shadow:0 0 4px rgba(210,175,100,.6)"></div>
+    <div class="rdot" style="top:6%;left:73%;background:rgba(170,120,210,.7);width:3px;height:3px"></div>
+    <div class="rdot" style="top:23%;left:97%;background:rgba(110,155,225,.8);box-shadow:0 0 4px rgba(110,155,225,.5)"></div>
+    <div class="rdot" style="top:50%;left:100%;background:rgba(210,175,100,.6);width:3px;height:3px"></div>
+    <div class="rdot" style="top:77%;left:93%;background:rgba(170,120,210,.7);box-shadow:0 0 4px rgba(170,120,210,.5)"></div>
+    <div class="rdot" style="top:94%;left:73%;background:rgba(110,155,225,.7);width:3px;height:3px"></div>
+    <div class="rdot" style="top:100%;left:47%;background:rgba(210,175,100,.8);box-shadow:0 0 4px rgba(210,175,100,.6)"></div>
+    <div class="rdot" style="top:94%;left:23%;background:rgba(170,120,210,.7);width:3px;height:3px"></div>
+    <div class="rdot" style="top:77%;left:4%;background:rgba(110,155,225,.8);box-shadow:0 0 4px rgba(110,155,225,.5)"></div>
+    <div class="rdot" style="top:50%;left:-.5%;background:rgba(210,175,100,.6);width:3px;height:3px"></div>
+    <div class="rdot" style="top:23%;left:2%;background:rgba(170,120,210,.7);box-shadow:0 0 4px rgba(170,120,210,.5)"></div>
+    <div class="rdot" style="top:6%;left:24%;background:rgba(110,155,225,.7);width:3px;height:3px"></div>
+
+    <div class="q-big">Q</div>
+  </div>
+
+  <div class="divider landing-divider">
+    <div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div>
+  </div>
+  <button class="btn-ghost landing-btn" onclick="go('s-select')">Započni meditaciju</button>
+</div>
+
+<!-- ══ S2: SELECT ══ -->
+<div class="screen" id="s-select">
+  <div class="q-small">Q</div>
+  <p class="label" style="font-size:.85rem;letter-spacing:.45em">Odaberi meditaciju</p>
+  <div class="cards">
+    <div class="card" onclick="selectSession('ground')">
+      <div class="card-icon">
+        <svg viewBox="0 0 60 60" width="62" height="62">
+          <defs>
+            <radialGradient id="g1" cx="38%" cy="32%">
+              <stop offset="0%" stop-color="#6aacff"/>
+              <stop offset="40%" stop-color="#2266cc"/>
+              <stop offset="100%" stop-color="#0a1a55"/>
+            </radialGradient>
+            <radialGradient id="g1a" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="rgba(100,180,255,0.18)"/>
+              <stop offset="100%" stop-color="rgba(30,80,180,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="30" cy="30" r="26" fill="url(#g1a)"/>
+          <circle cx="30" cy="30" r="20" fill="url(#g1)"/>
+          <ellipse cx="30" cy="30" rx="20" ry="6" fill="none" stroke="rgba(140,200,255,0.35)" stroke-width="0.8" transform="rotate(-20 30 30)"/>
+          <ellipse cx="30" cy="30" rx="20" ry="9" fill="none" stroke="rgba(100,160,255,0.2)" stroke-width="0.6" transform="rotate(15 30 30)"/>
+          <circle cx="22" cy="24" r="3" fill="rgba(180,220,255,0.15)"/>
+          <circle cx="36" cy="35" r="2" fill="rgba(100,160,255,0.12)"/>
+        </svg>
+      </div>
+      <div class="card-name">Uzemljenje</div>
+      <div class="card-desc">Povratak u vlastito središte</div>
+    </div>
+    <div class="card" onclick="selectSession('expand')">
+      <div class="card-icon">
+        <svg viewBox="0 0 60 60" width="62" height="62">
+          <defs>
+            <radialGradient id="g2" cx="38%" cy="32%">
+              <stop offset="0%" stop-color="#e8b060"/>
+              <stop offset="45%" stop-color="#c06820"/>
+              <stop offset="100%" stop-color="#5a2008"/>
+            </radialGradient>
+            <radialGradient id="g2a" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="rgba(240,160,60,0.18)"/>
+              <stop offset="100%" stop-color="rgba(180,80,20,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="30" cy="30" r="26" fill="url(#g2a)"/>
+          <circle cx="30" cy="30" r="20" fill="url(#g2)"/>
+          <ellipse cx="30" cy="30" rx="28" ry="5" fill="none" stroke="rgba(240,180,80,0.45)" stroke-width="1.2" transform="rotate(-10 30 30)"/>
+          <ellipse cx="30" cy="30" rx="28" ry="5" fill="rgba(220,160,60,0.06)" transform="rotate(-10 30 30)"/>
+          <ellipse cx="30" cy="30" rx="24" ry="3.5" fill="none" stroke="rgba(255,200,100,0.25)" stroke-width="0.7" transform="rotate(-10 30 30)"/>
+          <circle cx="25" cy="26" r="2.5" fill="rgba(255,200,120,0.15)"/>
+        </svg>
+      </div>
+      <div class="card-name">Ekspanzija</div>
+      <div class="card-desc">Stapanje s kozmosom</div>
+    </div>
+    <div class="card" onclick="selectSession('star')">
+      <div class="card-icon">
+        <svg viewBox="0 0 60 60" width="62" height="62">
+          <defs>
+            <radialGradient id="g3" cx="38%" cy="32%">
+              <stop offset="0%" stop-color="#c8f0d8"/>
+              <stop offset="40%" stop-color="#48b878"/>
+              <stop offset="100%" stop-color="#0a4020"/>
+            </radialGradient>
+            <radialGradient id="g3a" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="rgba(100,220,150,0.18)"/>
+              <stop offset="100%" stop-color="rgba(20,120,60,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="30" cy="30" r="26" fill="url(#g3a)"/>
+          <circle cx="30" cy="30" r="20" fill="url(#g3)"/>
+          <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(150,255,180,0.2)" stroke-width="0.5"/>
+          <circle cx="23" cy="25" r="4" fill="rgba(80,200,120,0.2)"/>
+          <circle cx="35" cy="33" r="5.5" fill="rgba(30,140,70,0.25)"/>
+          <circle cx="26" cy="36" r="3" fill="rgba(60,180,100,0.18)"/>
+          <circle cx="20" cy="26" r="2.5" fill="rgba(180,255,200,0.12)"/>
+        </svg>
+      </div>
+      <div class="card-name">Zvjezdana duša</div>
+      <div class="card-desc">Prepoznaj svjetlost koja si uvijek bila</div>
+    </div>
+    <div class="card" onclick="selectSession('void')">
+      <div class="card-icon">
+        <svg viewBox="0 0 60 60" width="62" height="62">
+          <defs>
+            <radialGradient id="g4" cx="38%" cy="32%">
+              <stop offset="0%" stop-color="#c0a0e8"/>
+              <stop offset="45%" stop-color="#6030b0"/>
+              <stop offset="100%" stop-color="#180838"/>
+            </radialGradient>
+            <radialGradient id="g4a" cx="50%" cy="50%">
+              <stop offset="0%" stop-color="rgba(160,100,240,0.2)"/>
+              <stop offset="100%" stop-color="rgba(60,10,120,0)"/>
+            </radialGradient>
+          </defs>
+          <circle cx="30" cy="30" r="26" fill="url(#g4a)"/>
+          <circle cx="30" cy="30" r="20" fill="url(#g4)"/>
+          <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(200,160,255,0.2)" stroke-width="0.5"/>
+          <ellipse cx="30" cy="30" rx="20" ry="4" fill="none" stroke="rgba(180,130,255,0.3)" stroke-width="0.7" transform="rotate(25 30 30)"/>
+          <circle cx="24" cy="25" r="3" fill="rgba(180,140,255,0.15)"/>
+          <circle cx="36" cy="34" r="2" fill="rgba(140,100,220,0.18)"/>
+        </svg>
+      </div>
+      <div class="card-name">Tišina</div>
+      <div class="card-desc">Najdublji odmor uma i srca</div>
+    </div>
+  </div>
+  <button class="btn-text" onclick="go('s-landing')">← Natrag</button>
+</div>
+
+<!-- ══ S3: DURATION ══ -->
+<div class="screen" id="s-duration">
+  <div class="q-small">Q</div>
+  <p class="session-name" id="dur-title">Uzemljenje</p>
+  <p class="label" style="font-size:.82rem;letter-spacing:.45em">Odaberi trajanje</p>
+  <div class="dur-row">
+    <button class="dur-btn active" onclick="setDur(5,this)">5 min</button>
+    <button class="dur-btn" onclick="setDur(10,this)">10 min</button>
+    <button class="dur-btn" onclick="setDur(15,this)">15 min</button>
+    <button class="dur-btn" onclick="setDur(20,this)">20 min</button>
+  </div>
+  <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
+  <button class="btn-ghost" style="font-size:.82rem;padding:1.1rem 2.8rem;letter-spacing:.35em" onclick="startMeditation()">Započni putovanje</button>
+  <button class="btn-text" onclick="go('s-select')" style="margin-top:.8rem;font-size:.78rem;letter-spacing:.25em">← Natrag</button>
+</div>
+
+<!-- ══ S4: MEDITATE ══ -->
+<div class="screen" id="s-meditate">
+  <p class="label" id="med-label">Uzemljenje</p>
+
+  <div class="orb-wrap">
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="orb-ring"></div>
+    <div class="orb-plasma"><canvas id="plasma-canvas"></canvas></div>
+    <div class="orb-core"></div>
+  </div>
+
+  <div class="med-box">
+    <div class="dots" id="dots"><span></span><span></span><span></span></div>
+    <p class="med-text" id="med-text"></p>
+  </div>
+
+  <div class="prog-track"><div class="prog-fill" id="prog"></div></div>
+  <p class="timer" id="timer">00:00</p>
+
+  <div class="med-controls">
+    <button class="ctrl" id="pause-btn" onclick="togglePause()">Pauza</button>
+    <button class="ctrl danger" onclick="endSession()">Završi</button>
+  </div>
+</div>
+
+<!-- ══ S5: COMPLETE ══ -->
+<div class="screen" id="s-complete">
+  <div class="complete-q">Q</div>
+  <p class="complete-title">Putovanje završeno</p>
+  <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
+  <p class="complete-msg" id="complete-msg"></p>
+  <div class="divider"></div>
+  <button class="btn-ghost" onclick="go('s-select')">Nova meditacija</button>
+</div>
+
+<script>
+// ══════════════════════════════════════
+// STARFIELD
+// ══════════════════════════════════════
+const sc = document.getElementById('stars');
+const sctx = sc.getContext('2d');
+const tc = document.getElementById('twinkle');
+const tctx = tc.getContext('2d');
+
+function rng(seed){ let s=seed; return ()=>{ s=(s*1664525+1013904223)&0xffffffff; return (s>>>0)/0xffffffff; }; }
+
+function drawStars(){
+  const W=sc.width=tc.width=innerWidth, H=sc.height=tc.height=innerHeight;
+  sctx.clearRect(0,0,W,H);
+  sctx.fillStyle='#080412'; sctx.fillRect(0,0,W,H);
+
+  // colour washes
+  [{x:.3,y:.4,r:W*.5,c:'rgba(65,28,115,0.13)'},{x:.7,y:.6,r:W*.4,c:'rgba(115,38,28,0.09)'},{x:.5,y:.3,r:W*.35,c:'rgba(28,58,135,0.09)'}]
+  .forEach(n=>{
+    const g=sctx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,n.r);
+    g.addColorStop(0,n.c); g.addColorStop(1,n.c.replace(/[\d.]+\)$/,'0)'));
+    sctx.fillStyle=g; sctx.fillRect(0,0,W,H);
+  });
+
+  const r=rng(42), total=Math.floor(W*H/420);
+  for(let i=0;i<total;i++){
+    const x=r()*W, y=r()*H, b=r();
+    const rad = b<.65?r()*.38+.14:b<.88?r()*.55+.38:r()*.9+.65;
+    const alpha = b<.65?r()*.28+.1:b<.88?r()*.38+.22:r()*.38+.42;
+    const t=r();
+    sctx.beginPath(); sctx.arc(x,y,rad,0,Math.PI*2);
+    sctx.fillStyle = t<.07?`rgba(255,225,120,${alpha})`:t<.15?`rgba(148,192,255,${alpha})`:t<.20?`rgba(255,168,138,${alpha})`:t<.24?`rgba(208,148,255,${alpha})`:`rgba(244,240,235,${alpha})`;
+    sctx.fill();
+  }
+
+  // cluster
+  const r2=rng(777), cx=W*.68, cy=H*.22;
+  for(let i=0;i<480;i++){
+    const a=r2()*Math.PI*2, d=r2()*r2()*W*.14;
+    const x=cx+Math.cos(a)*d, y=cy+Math.sin(a)*d;
+    sctx.beginPath(); sctx.arc(x,y,r2()*.75+.12,0,Math.PI*2);
+    const al=r2()*.52+.18;
+    sctx.fillStyle=r2()<.6?`rgba(255,${155+r2()*78|0},${78+r2()*78|0},${al})`:`rgba(${168+r2()*58|0},${198+r2()*48|0},255,${al*.8})`;
+    sctx.fill();
+  }
+
+  // bright stars — realistic glow only, no spikes
+  [{x:.05,y:.07,r:2.3,rgb:[148,208,255]},{x:.90,y:.05,r:2.1,rgb:[255,228,138]},{x:.95,y:.50,r:1.8,rgb:[148,208,255]},{x:.12,y:.93,r:2.0,rgb:[255,182,108]},{x:.74,y:.95,r:1.7,rgb:[212,148,255]},{x:.02,y:.55,r:1.6,rgb:[255,228,138]},{x:.50,y:.02,r:1.5,rgb:[148,208,255]},{x:.82,y:.76,r:1.6,rgb:[198,218,255]},{x:.18,y:.40,r:1.3,rgb:[255,212,138]},{x:.62,y:.10,r:1.4,rgb:[255,158,128]},{x:.35,y:.55,r:1.2,rgb:[198,228,255]},{x:.88,y:.38,r:1.3,rgb:[255,218,128]}]
+  .forEach(s=>{
+    const sx=s.x*W, sy=s.y*H, [rr,gg,bb]=s.rgb;
+    // atmospheric halo
+    let g=sctx.createRadialGradient(sx,sy,0,sx,sy,s.r*18);
+    g.addColorStop(0,`rgba(${rr},${gg},${bb},0.055)`); g.addColorStop(1,`rgba(${rr},${gg},${bb},0)`);
+    sctx.beginPath(); sctx.arc(sx,sy,s.r*18,0,Math.PI*2); sctx.fillStyle=g; sctx.fill();
+    // medium glow
+    g=sctx.createRadialGradient(sx,sy,0,sx,sy,s.r*5.5);
+    g.addColorStop(0,`rgba(${rr},${gg},${bb},0.22)`); g.addColorStop(.5,`rgba(${rr},${gg},${bb},0.1)`); g.addColorStop(1,`rgba(${rr},${gg},${bb},0)`);
+    sctx.beginPath(); sctx.arc(sx,sy,s.r*5.5,0,Math.PI*2); sctx.fillStyle=g; sctx.fill();
+    // tight glow
+    g=sctx.createRadialGradient(sx,sy,0,sx,sy,s.r*2);
+    g.addColorStop(0,'rgba(255,255,255,0.88)'); g.addColorStop(.35,`rgba(${rr},${gg},${bb},0.75)`); g.addColorStop(1,`rgba(${rr},${gg},${bb},0)`);
+    sctx.beginPath(); sctx.arc(sx,sy,s.r*2,0,Math.PI*2); sctx.fillStyle=g; sctx.fill();
+    // white core
+    sctx.beginPath(); sctx.arc(sx,sy,s.r*.55,0,Math.PI*2);
+    sctx.fillStyle='rgba(255,255,255,0.97)'; sctx.fill();
+  });
+}
+
+// twinkling
+const twinklers=[];
+function initTwinkle(){
+  twinklers.length=0;
+  const r=rng(99), W=innerWidth, H=innerHeight;
+  for(let i=0;i<100;i++) twinklers.push({x:r()*W,y:r()*H,rad:r()*.6+.18,a:r(),da:(r()-.5)*.022,gold:r()<.14});
+}
+(function animT(){
+  tctx.clearRect(0,0,tc.width,tc.height);
+  twinklers.forEach(s=>{
+    s.a+=s.da; if(s.a<.04||s.a>.88)s.da*=-1;
+    tctx.beginPath(); tctx.arc(s.x,s.y,s.rad,0,Math.PI*2);
+    tctx.fillStyle=s.gold?`rgba(218,172,78,${s.a*.55})`:`rgba(238,235,230,${s.a*.48})`;
+    tctx.fill();
+  });
+  requestAnimationFrame(animT);
+})();
+
+drawStars(); initTwinkle();
+window.addEventListener('resize',()=>{ drawStars(); initTwinkle(); });
+
+// ══════════════════════════════════════
+// PLASMA ORB
+// ══════════════════════════════════════
+const plasmaC = document.getElementById('plasma-canvas');
+const pctx = plasmaC.getContext('2d');
+let plasmaT = 0;
+function resizePlasma(){
+  const wrap = document.querySelector('.orb-wrap');
+  const size = wrap.offsetWidth * 0.42;
+  plasmaC.width = plasmaC.height = size;
+}
+resizePlasma();
+
+(function animPlasma(){
+  const S = plasmaC.width;
+  pctx.clearRect(0,0,S,S);
+  plasmaT += 0.018;
+  for(let y=0;y<S;y+=3){
+    for(let x=0;x<S;x+=3){
+      const dx=x/S-.5, dy=y/S-.5;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist>.5) continue;
+      const v = Math.sin(x/S*6+plasmaT*2)
+               +Math.sin(y/S*5+plasmaT*1.7)
+               +Math.sin((x+y)/S*4+plasmaT*1.3)
+               +Math.sin(dist*10-plasmaT*2.5);
+      const n=(v+4)/8;
+      const edge=1-dist*2;
+      const r=Math.floor(80+n*100);
+      const g=Math.floor(20+n*40);
+      const b=Math.floor(180+n*75);
+      pctx.fillStyle=`rgba(${r},${g},${b},${edge*.55})`;
+      pctx.fillRect(x,y,3,3);
+    }
+  }
+  requestAnimationFrame(animPlasma);
+})();
+
+// ══════════════════════════════════════
+// APP STATE
+// ══════════════════════════════════════
+let currentSession='ground', durationMin=5;
+let totalSecs, elapsed, timerInterval, paused=false;
+let phrases=[], phraseIdx=0, nextPhraseTO=null;
+let audioCtx=null, masterGain=null, drones=[], pulseIv=null;
+let currentAudio=null;
+const EL_KEY='sk_e01e94dd854f2e9b63f26422b77a577b1ec3f44c0158905c';
+const EL_VOICE='XB0fDUnXU5powFXDhCwa';
+
+const META={
+  ground:{name:'Uzemljenje',end:'Korijenjem se vraćaš u sebe. Tlo je tu, uvijek.'},
+  expand:{name:'Ekspanzija',end:'Granice su se rastopile. Ostaje samo prostor.'},
+  star:  {name:'Zvjezdana duša', end:'Uvijek si bila svjetlost. Danas si je vidjela.'},
+  void:  {name:'Tišina',  end:'U tišini između zvijezda — najdublji odmor.'}
+};
+
+// ── Navigation ──
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById(id);
+  el.classList.remove('active'); void el.offsetWidth; el.classList.add('active');
+}
+
+function selectSession(type){
+  currentSession=type;
+  document.getElementById('dur-title').textContent=META[type].name;
+  document.querySelectorAll('.dur-btn')[0].classList.add('active');
+  durationMin=5;
+  go('s-duration');
+}
+
+function setDur(m,btn){
+  durationMin=m;
+  document.querySelectorAll('.dur-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── AUDIO ──
+function initAudio(){
+  if(audioCtx) return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=audioCtx.createGain();
+  masterGain.gain.setValueAtTime(0,audioCtx.currentTime);
+  masterGain.connect(audioCtx.destination);
+}
+function makeOsc(freq,type,gain,detune=0){
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type=type; o.frequency.value=freq; o.detune.value=detune;
+  g.gain.value=gain; o.connect(g); g.connect(masterGain); o.start();
+  return{osc:o,g};
+}
+function makePink(gainVal){
+  const buf=audioCtx.createBuffer(1,audioCtx.sampleRate*2,audioCtx.sampleRate);
+  const d=buf.getChannelData(0); let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+  for(let i=0;i<d.length;i++){const w=Math.random()*2-1;b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.9690*b2+w*.1538520;b3=.8665*b3+w*.3104856;b4=.5500*b4+w*.5329522;b5=-.7616*b5-w*.0168980;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)/7;b6=w*.115926;}
+  const s=audioCtx.createBufferSource(); s.buffer=buf; s.loop=true;
+  const g=audioCtx.createGain(); g.gain.value=gainVal;
+  const f=audioCtx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=350;
+  s.connect(f); f.connect(g); g.connect(masterGain); s.start(); return{osc:s,g};
+}
+function startSound(){
+  initAudio(); stopSound();
+  drones.push(makeOsc(40,'sine',.18)); drones.push(makeOsc(40,'sine',.08,3));
+  drones.push(makeOsc(80,'sine',.06)); drones.push(makeOsc(120,'sine',.04));
+  drones.push(makeOsc(160,'sine',.025)); drones.push(makeOsc(320,'sine',.015));
+  drones.push(makeOsc(480,'sine',.008)); drones.push(makePink(.012));
+  masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  masterGain.gain.setValueAtTime(0,audioCtx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+4);
+  let ph=0; pulseIv=setInterval(()=>{ if(paused)return; ph+=.04; if(drones[2])drones[2].g.gain.value=.03+(.5+.5*Math.sin(ph))*.05; },80);
+}
+function stopSound(){
+  if(pulseIv){clearInterval(pulseIv);pulseIv=null;}
+  drones.forEach(({osc,g})=>{ try{g.gain.linearRampToValueAtTime(0,audioCtx.currentTime+1.5);osc.stop(audioCtx.currentTime+1.6);}catch(e){} });
+  drones=[];
+}
+function fadeSound(){
+  if(!masterGain)return;
+  masterGain.gain.setValueAtTime(masterGain.gain.value,audioCtx.currentTime);
+  masterGain.gain.linearRampToValueAtTime(0,audioCtx.currentTime+3);
+  setTimeout(stopSound,3200);
+}
+function playBell(){
+  if(!audioCtx)return;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(528,audioCtx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(264,audioCtx.currentTime+3);
+  g.gain.setValueAtTime(0,audioCtx.currentTime);
+  g.gain.linearRampToValueAtTime(.12,audioCtx.currentTime+.05);
+  g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+4);
+  o.connect(g); g.connect(masterGain); o.start(); o.stop(audioCtx.currentTime+4.1);
+}
+
+// ── SPEECH ──
+async function speak(text){
+  if(!text){schedNext(20000);return;}
+  if(masterGain&&audioCtx){masterGain.gain.setValueAtTime(masterGain.gain.value,audioCtx.currentTime);masterGain.gain.linearRampToValueAtTime(.3,audioCtx.currentTime+.8);}
+  try{
+    const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${EL_VOICE}`,{method:'POST',headers:{'xi-api-key':EL_KEY,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.75,similarity_boost:.85,style:.3,speed:.82}})});
+    if(!res.ok)throw new Error('EL '+res.status);
+    const blob=await res.blob(), url=URL.createObjectURL(blob);
+    if(currentAudio){currentAudio.pause();currentAudio=null;}
+    currentAudio=new Audio(url);
+    currentAudio.onended=()=>{ URL.revokeObjectURL(url); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+2); schedNext(20000); };
+    await currentAudio.play();
+  }catch(e){ console.warn(e); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+1); schedNext(20000); }
+}
+
+// ── AI PHRASES ──
+async function fetchPhrases(){
+  const el=document.getElementById('dots');
+  el.classList.add('show');
+  document.getElementById('med-text').classList.remove('show');
+  const prompts={
+    ground:'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za UZEMLJENJE. Kozmički, miran ton. Metafore: gravitacija, zvjezdana prašina, crna rupa. Odgovori SAMO JSON arrayem stringova.',
+    expand:'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za EKSPANZIJU. Eterični ton. Metafore: galaksije, tamna materija, horizont. Odgovori SAMO JSON arrayem stringova.',
+    star:  'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za ZVJEZDANU meditaciju. Metafore: supernova, konstelacije, unutarnje svjetlo. Odgovori SAMO JSON arrayem stringova.',
+    void:  'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za PRAZNINU. Metafore: vakuum, međuzvjezdana tišina, tama kao zagrljaj. Odgovori SAMO JSON arrayem stringova.'
+  };
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompts[currentSession]}]})});
+    const data=await res.json();
+    const clean=data.content[0].text.trim().replace(/```json|```/g,'').trim();
+    phrases=[...phrases,...JSON.parse(clean)];
+  }catch(e){
+    phrases=[...phrases,'Diši. Svemir te drži dok padaš prema unutra.','Misli prolaze kao meteori — promatraj, ne hvataj.','U srcu tišine, zvijezde govore bez riječi.','Svaki dah — malo bliže centru svega.','Ti si gravitacija koja drži vlastiti svemir.','Pusti. Kozmička tama je mekša nego što misliš.','Sada si samo dah. I svemir koji diše s tobom.'];
+  }
+  el.classList.remove('show');
+}
+
+function showPhrase(){
+  if(paused)return;
+  if(phraseIdx>=phrases.length){ fetchPhrases().then(showPhrase); return; }
+  const phrase=phrases[phraseIdx++];
+  const el=document.getElementById('med-text');
+  el.classList.remove('show');
+  playBell();
+  setTimeout(()=>{ el.textContent=phrase; el.classList.add('show'); setTimeout(()=>speak(phrase),600); },700);
+}
+
+function schedNext(ms){ clearTimeout(nextPhraseTO); nextPhraseTO=setTimeout(()=>{ if(!paused)showPhrase(); },ms); }
+
+// ── START ──
+async function startMeditation(){
+  go('s-meditate');
+  document.getElementById('med-label').textContent=META[currentSession].name;
+  totalSecs=durationMin*60; elapsed=0; paused=false; phraseIdx=0; phrases=[];
+  document.getElementById('prog').style.width='0%';
+  document.getElementById('timer').textContent='00:00';
+  document.getElementById('pause-btn').textContent='Pauza';
+  document.getElementById('med-text').classList.remove('show');
+  document.getElementById('med-text').textContent='';
+  resizePlasma();
+  startSound();
+  await fetchPhrases();
+  setTimeout(showPhrase,4500);
+  clearInterval(timerInterval);
+  timerInterval=setInterval(()=>{
+    if(paused)return;
+    elapsed++;
+    const m=Math.floor(elapsed/60), s=elapsed%60;
+    document.getElementById('timer').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    document.getElementById('prog').style.width=(elapsed/totalSecs*100)+'%';
+    if(elapsed>=totalSecs)endSession(true);
+  },1000);
+}
+
+function togglePause(){
+  paused=!paused;
+  document.getElementById('pause-btn').textContent=paused?'Nastavi':'Pauza';
+  if(paused){ if(currentAudio)currentAudio.pause(); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(.2,audioCtx.currentTime+1); clearTimeout(nextPhraseTO); }
+  else{ if(currentAudio)currentAudio.play(); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+1); schedNext(2000); }
+}
+
+function endSession(){
+  clearInterval(timerInterval); clearTimeout(nextPhraseTO);
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  fadeSound();
+  document.getElementById('complete-msg').textContent=META[currentSession].end;
+  go('s-complete');
+}
+
+
+</script>
+</body>
+</html>
