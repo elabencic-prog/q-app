@@ -454,7 +454,7 @@ html, body {
   <div class="divider landing-divider">
     <div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div>
   </div>
-  <button class="btn-ghost landing-btn" onclick="go('s-select')"><strong>Započni meditaciju</strong></button>
+  <button class="btn-ghost landing-btn" onclick="go('s-select')" style="font-weight:700;font-size:.82rem;letter-spacing:.28em;color:rgba(240,210,130,1);border-color:rgba(210,175,100,0.75)">ZAPOČNI MEDITACIJU</button>
 </div>
 
 <!-- ══ S2: SELECT ══ -->
@@ -464,24 +464,39 @@ html, body {
   <div class="cards">
     <div class="card" onclick="selectSession('ground')">
       <div class="card-icon">
-        <svg viewBox="0 0 60 60" width="62" height="62">
+        <svg viewBox="0 0 80 80" width="80" height="80">
           <defs>
-            <radialGradient id="g1" cx="38%" cy="32%">
-              <stop offset="0%" stop-color="#6aacff"/>
-              <stop offset="40%" stop-color="#2266cc"/>
-              <stop offset="100%" stop-color="#0a1a55"/>
+            <radialGradient id="eg1" cx="38%" cy="32%" r="65%">
+              <stop offset="0%" stop-color="#a8d8ff"/>
+              <stop offset="25%" stop-color="#4488ee"/>
+              <stop offset="55%" stop-color="#1144aa"/>
+              <stop offset="100%" stop-color="#061830"/>
             </radialGradient>
-            <radialGradient id="g1a" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="rgba(100,180,255,0.18)"/>
-              <stop offset="100%" stop-color="rgba(30,80,180,0)"/>
+            <radialGradient id="eg1glow" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent"/>
+              <stop offset="100%" stop-color="rgba(80,140,255,0.25)"/>
             </radialGradient>
+            <clipPath id="cp1"><circle cx="40" cy="40" r="26"/></clipPath>
           </defs>
-          <circle cx="30" cy="30" r="26" fill="url(#g1a)"/>
-          <circle cx="30" cy="30" r="20" fill="url(#g1)"/>
-          <ellipse cx="30" cy="30" rx="20" ry="6" fill="none" stroke="rgba(140,200,255,0.35)" stroke-width="0.8" transform="rotate(-20 30 30)"/>
-          <ellipse cx="30" cy="30" rx="20" ry="9" fill="none" stroke="rgba(100,160,255,0.2)" stroke-width="0.6" transform="rotate(15 30 30)"/>
-          <circle cx="22" cy="24" r="3" fill="rgba(180,220,255,0.15)"/>
-          <circle cx="36" cy="35" r="2" fill="rgba(100,160,255,0.12)"/>
+          <!-- glow -->
+          <circle cx="40" cy="40" r="32" fill="url(#eg1glow)"/>
+          <!-- base planet -->
+          <circle cx="40" cy="40" r="26" fill="url(#eg1)"/>
+          <!-- continent shapes -->
+          <g clip-path="url(#cp1)">
+            <ellipse cx="32" cy="34" rx="9" ry="6" fill="rgba(60,160,60,0.55)" transform="rotate(-15 32 34)"/>
+            <ellipse cx="48" cy="38" rx="6" ry="4" fill="rgba(50,140,50,0.45)" transform="rotate(10 48 38)"/>
+            <ellipse cx="28" cy="46" rx="7" ry="4" fill="rgba(70,170,70,0.4)" transform="rotate(-25 28 46)"/>
+            <ellipse cx="50" cy="28" rx="4" ry="3" fill="rgba(80,180,80,0.35)"/>
+            <!-- clouds -->
+            <ellipse cx="36" cy="28" rx="10" ry="3" fill="rgba(255,255,255,0.18)" transform="rotate(-10 36 28)"/>
+            <ellipse cx="50" cy="44" rx="8" ry="2.5" fill="rgba(255,255,255,0.15)" transform="rotate(5 50 44)"/>
+            <ellipse cx="24" cy="38" rx="7" ry="2" fill="rgba(255,255,255,0.12)"/>
+          </g>
+          <!-- atmosphere rim -->
+          <circle cx="40" cy="40" r="26" fill="none" stroke="rgba(120,180,255,0.3)" stroke-width="2"/>
+          <!-- specular highlight -->
+          <ellipse cx="30" cy="28" rx="8" ry="5" fill="rgba(255,255,255,0.12)" transform="rotate(-20 30 28)"/>
         </svg>
       </div>
       <div class="card-name">Uzemljenje</div>
@@ -489,24 +504,41 @@ html, body {
     </div>
     <div class="card" onclick="selectSession('expand')">
       <div class="card-icon">
-        <svg viewBox="0 0 60 60" width="62" height="62">
+        <svg viewBox="0 0 80 80" width="80" height="80">
           <defs>
-            <radialGradient id="g2" cx="38%" cy="32%">
-              <stop offset="0%" stop-color="#e8b060"/>
-              <stop offset="45%" stop-color="#c06820"/>
-              <stop offset="100%" stop-color="#5a2008"/>
+            <radialGradient id="eg2" cx="38%" cy="32%" r="65%">
+              <stop offset="0%" stop-color="#ffd090"/>
+              <stop offset="30%" stop-color="#d4882a"/>
+              <stop offset="65%" stop-color="#8b4010"/>
+              <stop offset="100%" stop-color="#3a1505"/>
             </radialGradient>
-            <radialGradient id="g2a" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="rgba(240,160,60,0.18)"/>
-              <stop offset="100%" stop-color="rgba(180,80,20,0)"/>
+            <radialGradient id="eg2glow" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent"/>
+              <stop offset="100%" stop-color="rgba(220,150,50,0.3)"/>
             </radialGradient>
+            <clipPath id="cp2"><circle cx="40" cy="40" r="22"/></clipPath>
           </defs>
-          <circle cx="30" cy="30" r="26" fill="url(#g2a)"/>
-          <circle cx="30" cy="30" r="20" fill="url(#g2)"/>
-          <ellipse cx="30" cy="30" rx="28" ry="5" fill="none" stroke="rgba(240,180,80,0.45)" stroke-width="1.2" transform="rotate(-10 30 30)"/>
-          <ellipse cx="30" cy="30" rx="28" ry="5" fill="rgba(220,160,60,0.06)" transform="rotate(-10 30 30)"/>
-          <ellipse cx="30" cy="30" rx="24" ry="3.5" fill="none" stroke="rgba(255,200,100,0.25)" stroke-width="0.7" transform="rotate(-10 30 30)"/>
-          <circle cx="25" cy="26" r="2.5" fill="rgba(255,200,120,0.15)"/>
+          <!-- glow -->
+          <circle cx="40" cy="40" r="34" fill="url(#eg2glow)"/>
+          <!-- rings back -->
+          <ellipse cx="40" cy="40" rx="36" ry="7" fill="none" stroke="rgba(210,170,80,0.5)" stroke-width="2.5" transform="rotate(-12 40 40)"/>
+          <ellipse cx="40" cy="40" rx="31" ry="5.5" fill="rgba(190,140,50,0.12)" stroke="rgba(190,150,60,0.4)" stroke-width="1.5" transform="rotate(-12 40 40)"/>
+          <ellipse cx="40" cy="40" rx="26" ry="4" fill="none" stroke="rgba(220,180,90,0.3)" stroke-width="1" transform="rotate(-12 40 40)"/>
+          <!-- planet body -->
+          <circle cx="40" cy="40" r="22" fill="url(#eg2)"/>
+          <!-- storm bands -->
+          <g clip-path="url(#cp2)">
+            <ellipse cx="40" cy="36" rx="22" ry="3" fill="rgba(180,100,20,0.4)"/>
+            <ellipse cx="40" cy="42" rx="22" ry="2.5" fill="rgba(140,70,10,0.35)"/>
+            <ellipse cx="40" cy="31" rx="22" ry="2" fill="rgba(200,130,40,0.3)"/>
+            <ellipse cx="40" cy="48" rx="22" ry="2" fill="rgba(160,90,20,0.3)"/>
+            <!-- great storm spot -->
+            <ellipse cx="35" cy="39" rx="5" ry="3.5" fill="rgba(255,160,60,0.35)" transform="rotate(-5 35 39)"/>
+          </g>
+          <!-- atmosphere -->
+          <circle cx="40" cy="40" r="22" fill="none" stroke="rgba(255,200,100,0.25)" stroke-width="1.5"/>
+          <!-- highlight -->
+          <ellipse cx="30" cy="30" rx="9" ry="5" fill="rgba(255,255,255,0.1)" transform="rotate(-20 30 30)"/>
         </svg>
       </div>
       <div class="card-name">Ekspanzija</div>
@@ -514,25 +546,38 @@ html, body {
     </div>
     <div class="card" onclick="selectSession('star')">
       <div class="card-icon">
-        <svg viewBox="0 0 60 60" width="62" height="62">
+        <svg viewBox="0 0 80 80" width="80" height="80">
           <defs>
-            <radialGradient id="g3" cx="38%" cy="32%">
-              <stop offset="0%" stop-color="#c8f0d8"/>
-              <stop offset="40%" stop-color="#48b878"/>
-              <stop offset="100%" stop-color="#0a4020"/>
+            <radialGradient id="eg3" cx="38%" cy="32%" r="65%">
+              <stop offset="0%" stop-color="#b0eeff"/>
+              <stop offset="30%" stop-color="#40a8d8"/>
+              <stop offset="65%" stop-color="#1060a0"/>
+              <stop offset="100%" stop-color="#041830"/>
             </radialGradient>
-            <radialGradient id="g3a" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="rgba(100,220,150,0.18)"/>
-              <stop offset="100%" stop-color="rgba(20,120,60,0)"/>
+            <radialGradient id="eg3glow" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent"/>
+              <stop offset="100%" stop-color="rgba(60,160,220,0.3)"/>
             </radialGradient>
+            <clipPath id="cp3"><circle cx="40" cy="40" r="24"/></clipPath>
           </defs>
-          <circle cx="30" cy="30" r="26" fill="url(#g3a)"/>
-          <circle cx="30" cy="30" r="20" fill="url(#g3)"/>
-          <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(150,255,180,0.2)" stroke-width="0.5"/>
-          <circle cx="23" cy="25" r="4" fill="rgba(80,200,120,0.2)"/>
-          <circle cx="35" cy="33" r="5.5" fill="rgba(30,140,70,0.25)"/>
-          <circle cx="26" cy="36" r="3" fill="rgba(60,180,100,0.18)"/>
-          <circle cx="20" cy="26" r="2.5" fill="rgba(180,255,200,0.12)"/>
+          <circle cx="40" cy="40" r="33" fill="url(#eg3glow)"/>
+          <!-- rings -->
+          <ellipse cx="40" cy="40" rx="35" ry="6" fill="rgba(100,200,240,0.08)" stroke="rgba(100,200,240,0.35)" stroke-width="1.5" transform="rotate(15 40 40)"/>
+          <ellipse cx="40" cy="40" rx="30" ry="4.5" fill="none" stroke="rgba(140,220,255,0.25)" stroke-width="1" transform="rotate(15 40 40)"/>
+          <!-- planet -->
+          <circle cx="40" cy="40" r="24" fill="url(#eg3)"/>
+          <g clip-path="url(#cp3)">
+            <!-- atmospheric bands -->
+            <ellipse cx="40" cy="35" rx="24" ry="3" fill="rgba(80,180,220,0.3)"/>
+            <ellipse cx="40" cy="44" rx="24" ry="2.5" fill="rgba(40,140,200,0.25)"/>
+            <!-- polar cap -->
+            <ellipse cx="40" cy="20" rx="14" ry="6" fill="rgba(200,240,255,0.35)"/>
+            <ellipse cx="40" cy="60" rx="12" ry="5" fill="rgba(200,240,255,0.25)"/>
+            <!-- surface shimmer -->
+            <ellipse cx="34" cy="38" rx="6" ry="4" fill="rgba(180,230,255,0.15)"/>
+          </g>
+          <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(120,200,255,0.3)" stroke-width="1.5"/>
+          <ellipse cx="30" cy="29" rx="9" ry="5" fill="rgba(255,255,255,0.12)" transform="rotate(-20 30 29)"/>
         </svg>
       </div>
       <div class="card-name">Zvjezdana duša</div>
@@ -540,24 +585,38 @@ html, body {
     </div>
     <div class="card" onclick="selectSession('void')">
       <div class="card-icon">
-        <svg viewBox="0 0 60 60" width="62" height="62">
+        <svg viewBox="0 0 80 80" width="80" height="80">
           <defs>
-            <radialGradient id="g4" cx="38%" cy="32%">
-              <stop offset="0%" stop-color="#c0a0e8"/>
-              <stop offset="45%" stop-color="#6030b0"/>
-              <stop offset="100%" stop-color="#180838"/>
+            <radialGradient id="eg4" cx="38%" cy="32%" r="65%">
+              <stop offset="0%" stop-color="#e0c0ff"/>
+              <stop offset="28%" stop-color="#9040e0"/>
+              <stop offset="60%" stop-color="#4010a0"/>
+              <stop offset="100%" stop-color="#0e0428"/>
             </radialGradient>
-            <radialGradient id="g4a" cx="50%" cy="50%">
-              <stop offset="0%" stop-color="rgba(160,100,240,0.2)"/>
-              <stop offset="100%" stop-color="rgba(60,10,120,0)"/>
+            <radialGradient id="eg4glow" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="transparent"/>
+              <stop offset="100%" stop-color="rgba(150,60,240,0.35)"/>
             </radialGradient>
+            <clipPath id="cp4"><circle cx="40" cy="40" r="24"/></clipPath>
           </defs>
-          <circle cx="30" cy="30" r="26" fill="url(#g4a)"/>
-          <circle cx="30" cy="30" r="20" fill="url(#g4)"/>
-          <circle cx="30" cy="30" r="20" fill="none" stroke="rgba(200,160,255,0.2)" stroke-width="0.5"/>
-          <ellipse cx="30" cy="30" rx="20" ry="4" fill="none" stroke="rgba(180,130,255,0.3)" stroke-width="0.7" transform="rotate(25 30 30)"/>
-          <circle cx="24" cy="25" r="3" fill="rgba(180,140,255,0.15)"/>
-          <circle cx="36" cy="34" r="2" fill="rgba(140,100,220,0.18)"/>
+          <circle cx="40" cy="40" r="33" fill="url(#eg4glow)"/>
+          <!-- rings -->
+          <ellipse cx="40" cy="40" rx="34" ry="6.5" fill="rgba(180,100,255,0.08)" stroke="rgba(180,100,255,0.4)" stroke-width="1.8" transform="rotate(20 40 40)"/>
+          <ellipse cx="40" cy="40" rx="29" ry="5" fill="none" stroke="rgba(200,140,255,0.25)" stroke-width="1" transform="rotate(20 40 40)"/>
+          <!-- planet -->
+          <circle cx="40" cy="40" r="24" fill="url(#eg4)"/>
+          <g clip-path="url(#cp4)">
+            <!-- storm swirls -->
+            <ellipse cx="40" cy="36" rx="24" ry="3" fill="rgba(120,40,200,0.35)"/>
+            <ellipse cx="40" cy="44" rx="24" ry="2.5" fill="rgba(80,20,160,0.3)"/>
+            <ellipse cx="40" cy="30" rx="24" ry="2" fill="rgba(160,80,240,0.25)"/>
+            <!-- vortex -->
+            <ellipse cx="44" cy="38" rx="6" ry="4" fill="rgba(220,160,255,0.2)" transform="rotate(15 44 38)"/>
+            <!-- dark spot -->
+            <circle cx="33" cy="44" r="4" fill="rgba(30,5,80,0.4)"/>
+          </g>
+          <circle cx="40" cy="40" r="24" fill="none" stroke="rgba(180,120,255,0.3)" stroke-width="1.5"/>
+          <ellipse cx="30" cy="29" rx="9" ry="5" fill="rgba(255,255,255,0.1)" transform="rotate(-20 30 29)"/>
         </svg>
       </div>
       <div class="card-name">Tišina</div>
@@ -573,10 +632,9 @@ html, body {
   <p class="session-name" id="dur-title">Uzemljenje</p>
   <p class="label" style="font-size:.82rem;letter-spacing:.45em">Odaberi trajanje</p>
   <div class="dur-row">
-    <button class="dur-btn active" onclick="setDur(5,this)">5 min</button>
-    <button class="dur-btn" onclick="setDur(10,this)">10 min</button>
+    <button class="dur-btn active" onclick="setDur(10,this)">10 min</button>
     <button class="dur-btn" onclick="setDur(15,this)">15 min</button>
-    <button class="dur-btn" onclick="setDur(20,this)">20 min</button>
+    <button class="dur-btn" onclick="setDur(30,this)">30 min</button>
   </div>
   <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
   <button class="btn-ghost" style="font-size:.82rem;padding:1.1rem 2.8rem;letter-spacing:.35em" onclick="startMeditation()">Započni putovanje</button>
@@ -749,13 +807,12 @@ resizePlasma();
 // ══════════════════════════════════════
 // APP STATE
 // ══════════════════════════════════════
-let currentSession='ground', durationMin=5;
+let currentSession='ground', durationMin=10;
 let totalSecs, elapsed, timerInterval, paused=false;
 let phrases=[], phraseIdx=0, nextPhraseTO=null;
 let audioCtx=null, masterGain=null, drones=[], pulseIv=null;
 let currentAudio=null;
-const EL_KEY='sk_e01e94dd854f2e9b63f26422b77a577b1ec3f44c0158905c';
-const EL_VOICE='XB0fDUnXU5powFXDhCwa';
+const OPENAI_KEY='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';
 
 const META={
   ground:{name:'Uzemljenje',end:'Korijenjem se vraćaš u sebe. Tlo je tu, uvijek.'},
@@ -775,7 +832,7 @@ function selectSession(type){
   currentSession=type;
   document.getElementById('dur-title').textContent=META[type].name;
   document.querySelectorAll('.dur-btn')[0].classList.add('active');
-  durationMin=5;
+  durationMin=10;
   go('s-duration');
 }
 
@@ -844,16 +901,47 @@ function playBell(){
 // ── SPEECH ──
 async function speak(text){
   if(!text){schedNext(20000);return;}
-  if(masterGain&&audioCtx){masterGain.gain.setValueAtTime(masterGain.gain.value,audioCtx.currentTime);masterGain.gain.linearRampToValueAtTime(.3,audioCtx.currentTime+.8);}
+  // Handle silence marker
+  if(text.includes('[TIŠINA')){
+    if(masterGain&&audioCtx) masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+2);
+    schedNext(65000);
+    return;
+  }
+  // Duck music while speaking
+  if(masterGain&&audioCtx){
+    masterGain.gain.setValueAtTime(masterGain.gain.value,audioCtx.currentTime);
+    masterGain.gain.linearRampToValueAtTime(.28,audioCtx.currentTime+1);
+  }
   try{
-    const res=await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${EL_VOICE}`,{method:'POST',headers:{'xi-api-key':EL_KEY,'Content-Type':'application/json'},body:JSON.stringify({text,model_id:'eleven_multilingual_v2',voice_settings:{stability:.75,similarity_boost:.85,style:.3,speed:.82}})});
-    if(!res.ok)throw new Error('EL '+res.status);
-    const blob=await res.blob(), url=URL.createObjectURL(blob);
-    if(currentAudio){currentAudio.pause();currentAudio=null;}
-    currentAudio=new Audio(url);
-    currentAudio.onended=()=>{ URL.revokeObjectURL(url); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+2); schedNext(20000); };
+    const res = await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + OPENAI_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'tts-1-hd',
+        input: text,
+        voice: 'nova',       // nova = warm, calm female voice
+        speed: 0.82
+      })
+    });
+    if(!res.ok) throw new Error('OpenAI TTS ' + res.status);
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    if(currentAudio){currentAudio.pause(); currentAudio=null;}
+    currentAudio = new Audio(url);
+    currentAudio.onended = () => {
+      URL.revokeObjectURL(url);
+      if(masterGain&&audioCtx) masterGain.gain.linearRampToValueAtTime(1, audioCtx.currentTime+2);
+      schedNext(28000);
+    };
     await currentAudio.play();
-  }catch(e){ console.warn(e); if(masterGain&&audioCtx)masterGain.gain.linearRampToValueAtTime(1,audioCtx.currentTime+1); schedNext(20000); }
+  } catch(e) {
+    console.warn('TTS error:', e);
+    if(masterGain&&audioCtx) masterGain.gain.linearRampToValueAtTime(1, audioCtx.currentTime+1);
+    schedNext(28000);
+  }
 }
 
 // ── AI PHRASES ──
@@ -862,10 +950,61 @@ async function fetchPhrases(){
   el.classList.add('show');
   document.getElementById('med-text').classList.remove('show');
   const prompts={
-    ground:'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za UZEMLJENJE. Kozmički, miran ton. Metafore: gravitacija, zvjezdana prašina, crna rupa. Odgovori SAMO JSON arrayem stringova.',
-    expand:'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za EKSPANZIJU. Eterični ton. Metafore: galaksije, tamna materija, horizont. Odgovori SAMO JSON arrayem stringova.',
-    star:  'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za ZVJEZDANU meditaciju. Metafore: supernova, konstelacije, unutarnje svjetlo. Odgovori SAMO JSON arrayem stringova.',
-    void:  'Generiraj 7 kratkih poetskih meditacijskih fraza na hrvatskom za PRAZNINU. Metafore: vakuum, međuzvjezdana tišina, tama kao zagrljaj. Odgovori SAMO JSON arrayem stringova.'
+    ground:`Ti si glas kozmičke vođene meditacije. Napiši STRUKTURIRANU vođenu meditaciju na hrvatskom jeziku za temu UZEMLJENJE. Trajanje: 5-7 minuta kad se čita sporim tempom.
+
+Struktura mora biti TOČNO ovako:
+1. UVOD S DISANJEM (2-3 rečenice) — pozovi osobu da zatvori oči, udahne duboko, opusti tijelo
+2. DISANJE (3-4 upute) — vodi kroz udisaj i izdisaj s brojenjem, npr "Udahni... dva... tri... četiri... Zadrži... izdahni polako..."
+3. KOZMIČKA VIZUALIZACIJA (4-5 rečenica) — vizualizacija svemira, gravitacije, zvjezdane prašine, uzemljenja kroz kozmičku vezu sa Zemljom
+4. PRODUBLJIVANJE (3-4 rečenice) — dublje opuštanje, osjećaj težine i mira
+5. AFIRMACIJE (3 afirmacije) — kratke, snažne, u prvom licu, kozmički ton
+6. TIŠINA — napiši samo: "[TIŠINA - 60 sekundi]"
+7. POVRATAK (2-3 rečenice) — nježno vraćanje, zahvalnost, otvaranje očiju
+
+Ton: miran, poetski, topao ženski glas. Koristi pauze označene s "..." između rečenica.
+Odgovori SAMO JSON arrayem stringova gdje je svaki string jedna faza/rečenica. Bez objašnjenja.`,
+
+    expand:`Ti si glas kozmičke vođene meditacije. Napiši STRUKTURIRANU vođenu meditaciju na hrvatskom jeziku za temu EKSPANZIJA. Trajanje: 5-7 minuta kad se čita sporim tempom.
+
+Struktura mora biti TOČNO ovako:
+1. UVOD S DISANJEM (2-3 rečenice) — pozovi osobu da zatvori oči, udahne duboko, pusti granice da se rastope
+2. DISANJE (3-4 upute) — vodi kroz udisaj i izdisaj, svaki dah širi prostor unutra
+3. KOZMIČKA VIZUALIZACIJA (4-5 rečenica) — vizualizacija stapanja s kozmosom, galaksije, tamna materija, osjećaj beskraja
+4. PRODUBLJIVANJE (3-4 rečenice) — granice između tebe i svemira nestaju, postaješ jedno
+5. AFIRMACIJE (3 afirmacije) — kratke, snažne, u prvom licu, tema slobode i ekspanzije
+6. TIŠINA — napiši samo: "[TIŠINA - 60 sekundi]"
+7. POVRATAK (2-3 rečenice) — nježno vraćanje, donoseći tu prostranstvo sa sobom
+
+Ton: eterični, oslobađajući, poetski. Koristi pauze označene s "..." između rečenica.
+Odgovori SAMO JSON arrayem stringova gdje je svaki string jedna faza/rečenica. Bez objašnjenja.`,
+
+    star:`Ti si glas kozmičke vođene meditacije. Napiši STRUKTURIRANU vođenu meditaciju na hrvatskom jeziku za temu ZVJEZDANA DUŠA. Trajanje: 5-7 minuta kad se čita sporim tempom.
+
+Struktura mora biti TOČNO ovako:
+1. UVOD S DISANJEM (2-3 rečenice) — pozovi osobu da zatvori oči, udahne duboko, prepozna svjetlost u sebi
+2. DISANJE (3-4 upute) — svaki udah donosi više svjetlosti, svaki izdah pušta ono što je više nije potrebno
+3. KOZMIČKA VIZUALIZACIJA (4-5 rečenica) — vizualizacija unutarnjeg sjaja, supernova unutar srca, konstelacije koje si uvijek bila
+4. PRODUBLJIVANJE (3-4 rečenice) — prepoznavanje vlastite vrijednosti, sjaja koji ne može nestati
+5. AFIRMACIJE (3 afirmacije) — kratke, snažne, u prvom licu, tema unutarnjeg svjetla i snage
+6. TIŠINA — napiši samo: "[TIŠINA - 60 sekundi]"
+7. POVRATAK (2-3 rečenice) — vraćanje s osjećajem vlastitog sjaja, zahvalnost
+
+Ton: nježan, snažan, poetski. Koristi pauze označene s "..." između rečenica.
+Odgovori SAMO JSON arrayem stringova gdje je svaki string jedna faza/rečenica. Bez objašnjenja.`,
+
+    void:`Ti si glas kozmičke vođene meditacije. Napiši STRUKTURIRANU vođenu meditaciju na hrvatskom jeziku za temu TIŠINA. Trajanje: 5-7 minuta kad se čita sporim tempom.
+
+Struktura mora biti TOČNO ovako:
+1. UVOD S DISANJEM (2-3 rečenice) — pozovi osobu da zatvori oči, pusti sve misli, udahne tišinu
+2. DISANJE (3-4 upute) — svaki dah sve tiši, svaki izdisaj pušta buku uma
+3. KOZMIČKA VIZUALIZACIJA (4-5 rečenica) — vizualizacija međuzvjezdanog prostora, tame kao zagrljaja, tišine između zvijezda
+4. PRODUBLJIVANJE (3-4 rečenice) — um se smiruje, misli su kao udaljene zvijezde, ti si prostor između njih
+5. AFIRMACIJE (3 afirmacije) — kratke, tihe, u prvom licu, tema unutarnjeg mira i tišine
+6. TIŠINA — napiši samo: "[TIŠINA - 60 sekundi]"
+7. POVRATAK (2-3 rečenice) — nježno vraćanje iz tišine, noseći mir sa sobom
+
+Ton: dubok, miran, zenovsko-kozmički. Koristi pauze označene s "..." između rečenica.
+Odgovori SAMO JSON arrayem stringova gdje je svaki string jedna faza/rečenica. Bez objašnjenja.`
   };
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompts[currentSession]}]})});
@@ -903,7 +1042,7 @@ async function startMeditation(){
   resizePlasma();
   startSound();
   await fetchPhrases();
-  setTimeout(showPhrase,4500);
+  setTimeout(showPhrase,6000);
   clearInterval(timerInterval);
   timerInterval=setInterval(()=>{
     if(paused)return;
