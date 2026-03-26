@@ -278,7 +278,7 @@ function startMed(){go('s-meditate');document.getElementById('med-label').textCo
     // Duck music
     if(bgMusic){var v0=bgMusic.volume,dk=setInterval(function(){v0=Math.max(v0-.03,.1);if(bgMusic)bgMusic.volume=v0;if(v0<=.1)clearInterval(dk);},80);}
     // Play part 1
-    var part1=new Audio('govor uzemljnje 10 prvi dio-enhanced-v2.mp3');
+    var part1=new Audio('govor uzemljenje 10 prvi dio-enhanced-v2.mp3');
     part1.play().catch(function(e){console.warn('Part1:',e);});
     part1.onended=function(){
       // Play part 2 after part 1
