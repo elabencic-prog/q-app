@@ -35,7 +35,7 @@ html, body {
    SCREENS
 ══════════════════════════════════════ */
 .screen {
-  position: fixed; inset:0; z-index:10;
+  position: fixed; inset:0; z-index:100;
   display: none;
   flex-direction: column;
   align-items: center;
@@ -433,7 +433,7 @@ html, body {
 
 <!-- ══ S1: LANDING ══ -->
 <div class="screen active" id="s-landing">
-  <p class="landing-label">Kozmička meditacija</p>
+  <p class="landing-label" style="position:relative;z-index:200;">Kozmička meditacija</p>
 
   <div class="logo-frame">
     <!-- Static rings -->
@@ -896,10 +896,10 @@ let currentAudio=null;
 const OPENAI_KEY='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';
 
 const META={
-  ground:{name:'Uzemljenje',end:'Korijenjem se vraćaš u sebe. Tlo je tu, uvijek.'},
-  expand:{name:'Ekspanzija',end:'Granice su se rastopile. Ostaje samo prostor.'},
-  star:  {name:'Šum zvijezda', end:'Uvijek si bila svjetlost. Danas si je vidjela.'},
-  void:  {name:'Šum zvijezda',  end:'U tišini između zvijezda — najdublji odmor.'}
+  ground:{name:'Uzemljenje',   end:'Korijenjem se vraćaš u sebe. Tlo je tu, uvijek.'},
+  expand:{name:'Ekspanzija',   end:'Granice su se rastopile. Ostaje samo prostor.'},
+  star:  {name:'Šum zvijezda', end:'Utopila si se u šum beskrajnog svemira.'},
+  neural:{name:'Neuralna harmonija', end:'Tvoj um je harmoniziran. Nosiš tu ravnotežu sa sobom.'}
 };
 
 // ── Navigation ──
@@ -953,7 +953,7 @@ const MUSIC = {
   ground: 'dream.mp3',
   expand: 'ambience.mp3',
   star:   'glas.mp3',
-  void:   'nebula.mp3'
+  neural: 'nebula.mp3'
 };
 let bgMusic = null;
 
