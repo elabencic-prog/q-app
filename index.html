@@ -266,23 +266,52 @@ function fadeMusic(){if(!bgMusic)return;var v=bgMusic.volume,fo=setInterval(func
 
 function speak(text){if(!text){schedNext(20000);return;}if(text.indexOf('[TIŠINA')>=0||text.indexOf('[TIŠINA')>=0){if(bgMusic)bgMusic.volume=.55;schedNext(65000);return;}if(bgMusic){var v=bgMusic.volume,dk=setInterval(function(){v=Math.max(v-.03,.1);if(bgMusic)bgMusic.volume=v;if(v<=.1)clearInterval(dk);},80);}fetch('https://api.openai.com/v1/audio/speech',{method:'POST',headers:{'Authorization':'Bearer '+OKEY,'Content-Type':'application/json'},body:JSON.stringify({model:'tts-1-hd',input:text,voice:'nova',speed:.82})}).then(function(res){return res.blob();}).then(function(blob){var url=URL.createObjectURL(blob);if(currentAudio){currentAudio.pause();currentAudio=null;}currentAudio=new Audio(url);currentAudio.onended=function(){URL.revokeObjectURL(url);if(bgMusic){var v=bgMusic.volume,uk=setInterval(function(){v=Math.min(v+.02,.55);if(bgMusic)bgMusic.volume=v;if(v>=.55)clearInterval(uk);},100);}schedNext(28000);};currentAudio.play().catch(function(e){console.warn('Audio play:',e);schedNext(28000);});}).catch(function(e){console.warn('TTS:',e);if(bgMusic)bgMusic.volume=.55;schedNext(28000);});}
 
-function fetchPhrases(){document.getElementById('dots').classList.add('show');document.getElementById('med-text').textContent='';var prompts={ground:'Napiši strukturiranu vođenu meditaciju na hrvatskom za UZEMLJENJE. Uvod s disanjem, kozmička vizualizacija, afirmacije, tišina. SAMO JSON array stringova.',expand:'Napiši strukturiranu vođenu meditaciju na hrvatskom za EKSPANZIJU. Uvod s disanjem, stapanje s kozmosom, afirmacije, tišina. SAMO JSON array stringova.',star:'Napiši strukturiranu vođenu meditaciju na hrvatskom za SUM ZVIJEZDA. Uvod s disanjem, vizualizacija, afirmacije, tišina. SAMO JSON array stringova.',neural:'Napiši strukturiranu vođenu meditaciju na hrvatskom za NEURALNU HARMONIJU. Bilateralna stimulacija, harmonizacija uma, afirmacije. SAMO JSON array stringova.'};return fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompts[session]}]})}).then(function(res){return res.json();}).then(function(data){try{var clean=data.content[0].text.trim().replace(/```json|```/g,'').trim();phrases=phrases.concat(JSON.parse(clean));}catch(e){setFallback();}}).catch(function(){setFallback();}).finally(function(){document.getElementById('dots').classList.remove('show');});}
-
-function setFallback(){phrases=phrases.concat(['Zatvori oči... Udahni duboko... i pusti tijelo da se spusti.','Udahni... dva... tri... četiri... Zadrži... i izdahni polako...','Zamislaj da si u srcu svemira... Gravitacija te drži... nježno... sigurno...','Zvjezdana prašina od koje si napravljena... vraća se sada kući... u tebe.','Ja sam sigurna. Ja sam uzemljena. Ja sam dio svemira koji diše.','[TIŠINA - 60 sekundi]','Polako... postani svjesna prostora oko sebe... Zahvali sebi... otvori oči.']);}
-
-function showPhrase(){
-  if(paused)return;
-  if(phraseIdx>=phrases.length) phraseIdx=0; // loop
-  var phrase=phrases[phraseIdx++];
-  var el=document.getElementById('med-text');
-  // Fade out
-  el.style.transition='opacity 1.5s';
-  el.style.opacity='0';
-  setTimeout(function(){
-    el.textContent=phrase;
-    el.style.opacity='1';
-  },1500);
-  schedNext(28000); // show each affirmation for 28 seconds
+var AFFIRMATIONS={
+  ground:[
+    'Ti si dio svemira koji diše.',
+    'Gravitacija te drži. Sigurna si.',
+    'Zvjezdana prašina od koje si napravljena vraća se kući.',
+    'U ovom trenutku — sve je kako treba biti.',
+    'Tvoji korijeni sežu do srca Zemlje.',
+    'Svemir te poznaje. Uvijek si bila tu.',
+    'Diši. Pusti. Budi.',
+    'Između zvijezda i tebe — nema razlike.'
+  ],
+  expand:[
+    'Granice između tebe i svemira nestaju.',
+    'Ti si beskrajna koliko i svemir.',
+    'Svaki udah širi tvoj prostor.',
+    'Pusti sve što te drži. Slobodna si.',
+    'Svemir i ti — jedno.',
+    'Nema kraja. Nema granica. Samo sloboda.',
+    'Ekspandiraj. Rastu. Postani.',
+    'Tamna materija i ti dijelite isti prostor.'
+  ],
+  star:[
+    'Šum zvijezda prolazi kroz tebe.',
+    'Milijarde zvijezda pjevaju tvoje ime.',
+    'Ti si svjetlost koja ne može ugasnuti.',
+    'Svemir šapuće. Slušaj.',
+    'Između zvijezda — tu si ti.',
+    'Tvoj sjaj je vječan.',
+    'Kozmički šum te nosi.',
+    'Utopi se. Nestani. Pronađi se.'
+  ],
+  neural:[
+    'Tvoj um se harmonizira.',
+    'Lijeva i desna strana — u savršenom ritmu.',
+    'Svaki neuron titra u miru.',
+    'Misli dolaze i odlaze poput valova.',
+    'Tvoj mozak pronalazi ravnotežu.',
+    'Zvuk te liječi iznutra.',
+    'Mentalni balans — tvoje prirodno stanje.',
+    'Harmonija. Mir. Jasnoća.'
+  ]
+};
+function fetchPhrases(){
+  document.getElementById('dots').classList.remove('show');
+  phrases = AFFIRMATIONS[session] || AFFIRMATIONS.ground;
+  return Promise.resolve();
 }
 function schedNext(ms){clearTimeout(nextTO);nextTO=setTimeout(function(){if(!paused)showPhrase();},ms);}
 
