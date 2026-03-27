@@ -240,7 +240,8 @@ html,body { width:100%;height:100%;background:var(--bg);color:var(--text);font-f
 <script>
 var sc=document.getElementById('stars'),sctx=sc.getContext('2d');
 function rng(s){return function(){s=(s*1664525+1013904223)&0xffffffff;return(s>>>0)/0xffffffff;};}
-function drawStars(){var W=sc.width=innerWidth,H=sc.height=innerHeight;sctx.fillStyle='#080412';sctx.fillRect(0,0,W,H);[{x:.3,y:.4,r:W*.5,c:'rgba(65,28,115,0.13)'},{x:.7,y:.6,r:W*.4,c:'rgba(115,38,28,0.09)'}].forEach(function(n){var g=sctx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,n.r);g.addColorStop(0,n.c);g.addColorStop(1,'rgba(0,0,0,0)');sctx.fillStyle=g;sctx.fillRect(0,0,W,H);});var r=rng(42),total=Math.floor(W*H/420);for(var i=0;i<total;i++){var x=r()*W,y=r()*H,b=r(),rad=b<.65?r()*.38+.14:r()*.9+.65,alpha=b<.65?r()*.28+.1:r()*.38+.42,t=r();sctx.beginPath();sctx.arc(x,y,rad,0,Math.PI*2);sctx.fillStyle=t<.1?'rgba(255,225,120,'+alpha+')':t<.2?'rgba(148,192,255,'+alpha+')':'rgba(244,240,235,'+alpha+')';sctx.fill();}var r2=rng(777),cx=W*.68,cy=H*.22;for(var i=0;i<400;i++){var a=r2()*Math.PI*2,d=r2()*r2()*W*.14,x2=cx+Math.cos(a)*d,y2=cy+Math.sin(a)*d,al=r2()*.52+.18;sctx.beginPath();sctx.arc(x2,y2,r2()*.75+.12,0,Math.PI*2);sctx.fillStyle='rgba(255,'+(155+r2()*78|0)+','+(78+r2()*78|0)+','+al+')';sctx.fill();}}
+function drawStars(){var W=sc.width=innerWidth,H=sc.height=innerHeight;sctx.fillStyle='#080412';sctx.fillRect(0,0,W,H);[{x:.3,y:.4,r:W*.5,c:'rgba(65,28,115,0.13)'},{x:.7,y:.6,r:W*.4,c:'rgba(115,38,28,0.09)'}].forEach(function(n){var g=sctx.createRadialGradient(n.x*W,n.y*H,0,n.x*W,n.y*H,n.r);g.addColorStop(0,n.c);g.addColorStop(1,'rgba(0,0,0,0)');sctx.fillStyle=g;sctx.fillRect(0,0,W,H);});var r=rng(42),total=Math.floor(W*H/420);for(var i=0;i<total;i++){var x=r()*W,y=r()*H,b=r(),rad=b<.65?r()*.38+.14:r()*.9+.65,alpha=b<.65?r()*.28+.1:r()*.38+.42,t=r();sctx.beginPath();sctx.arc(x,y,rad,0,Math.PI*2);sctx.fillStyle=t<.1?'rgba(255,225,120,'+alpha+')':t<.2?'rgba(148,192,255,'+alpha+')':'rgba(244,240,235,'+alpha+')';sctx.fill();}var r2=rng(777),cx=W*.68,cy=H*.22;for(var i=0;i<400;i++){var a=r2()*Math.PI*2,d=r2()*r2()*W*.14,x2=cx+Math.cos(a)*d,y2=cy+Math.sin(a)*d,al=r2()*.52+.18;sctx.beginPath();sctx.arc(x2,y2,r2()*.75+.12,0,Math.PI*2);sctx.fillStyle='rgba(255,'+(155+r2()*78|0)+','+(78+r2()*78|0)+','+al+')';sctx.fill();}
+}
 drawStars();window.addEventListener('resize',drawStars);
 
 // Twinkling
@@ -278,11 +279,11 @@ function startMed(){go('s-meditate');document.getElementById('med-label').textCo
     // Duck music
     if(bgMusic){var v0=bgMusic.volume,dk=setInterval(function(){v0=Math.max(v0-.03,.1);if(bgMusic)bgMusic.volume=v0;if(v0<=.1)clearInterval(dk);},80);}
     // Play part 1
-    var part1=new Audio('govor uzemljenje 10 prvi dio-enhanced-v2.mp3');
+    var part1=new Audio('govor uzemljenje 10 prvi dio-enhanced-v2.mp3'); window._part1=part1;
     part1.play().catch(function(e){console.warn('Part1:',e);});
     part1.onended=function(){
       // Play part 2 after part 1
-      var part2=new Audio('govor uzemljnje 10 min drugi dio-enhanced-v2.mp3');
+      var part2=new Audio('govor uzemljnje 10 min drugi dio-enhanced-v2.mp3'); window._part2=part2;
       part2.play().catch(function(e){console.warn('Part2:',e);});
       part2.onended=function(){
         // Bring music back up
@@ -294,7 +295,16 @@ function startMed(){go('s-meditate');document.getElementById('med-label').textCo
   }clearInterval(timerIv);timerIv=setInterval(function(){if(paused)return;elapsed++;var m=Math.floor(elapsed/60),s=elapsed%60;document.getElementById('timer').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;document.getElementById('prog').style.width=(elapsed/totalSecs*100)+'%';if(elapsed>=totalSecs)endSession(true);},1000);}
 
 function togglePause(){paused=!paused;document.getElementById('pause-btn').textContent=paused?'Nastavi':'Pauza';if(paused){if(currentAudio)currentAudio.pause();if(bgMusic)bgMusic.pause();clearTimeout(nextTO);}else{if(currentAudio)currentAudio.play();if(bgMusic)bgMusic.play();schedNext(2000);}}
-function endSession(){clearInterval(timerIv);clearTimeout(nextTO);if(currentAudio){currentAudio.pause();currentAudio=null;}fadeMusic();document.getElementById('complete-msg').textContent=META[session].end;go('s-complete');}
+function endSession(){
+  clearInterval(timerIv);clearTimeout(nextTO);
+  if(currentAudio){currentAudio.pause();currentAudio=null;}
+  // Stop pre-recorded voice parts
+  if(window._part1){window._part1.pause();window._part1=null;}
+  if(window._part2){window._part2.pause();window._part2=null;}
+  fadeMusic();
+  document.getElementById('complete-msg').textContent=META[session].end;
+  go('s-complete');
+}
 </script>
 </body>
 </html>
