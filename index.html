@@ -287,24 +287,20 @@ function showPhrase(){
 function schedNext(ms){clearTimeout(nextTO);nextTO=setTimeout(function(){if(!paused)showPhrase();},ms);}
 
 function startMed(){go('s-meditate');document.getElementById('med-label').textContent=META[session].name;totalSecs=durMin*60;elapsed=0;paused=false;phraseIdx=0;phrases=[];document.getElementById('prog').style.width='0%';document.getElementById('timer').textContent='00:00';document.getElementById('pause-btn').textContent='Pauza';document.getElementById('med-text').textContent='';startMusic();
+  // Always show affirmations
+  fetchPhrases().then(function(){setTimeout(showPhrase,8000);});
   if(session==='ground'){
-    document.getElementById('dots').classList.remove('show');
-    // Duck music
+    // Duck music and play voice
     if(bgMusic){var v0=bgMusic.volume,dk=setInterval(function(){v0=Math.max(v0-.03,.1);if(bgMusic)bgMusic.volume=v0;if(v0<=.1)clearInterval(dk);},80);}
-    // Play part 1
     var part1=new Audio('govor uzemljenje 10 prvi dio-enhanced-v2.mp3'); window._part1=part1;
     part1.play().catch(function(e){console.warn('Part1:',e);});
     part1.onended=function(){
-      // Play part 2 after part 1
       var part2=new Audio('govor uzemljnje 10 min drugi dio-enhanced-v2.mp3'); window._part2=part2;
       part2.play().catch(function(e){console.warn('Part2:',e);});
       part2.onended=function(){
-        // Bring music back up
         if(bgMusic){var v2=bgMusic.volume,uk=setInterval(function(){v2=Math.min(v2+.02,.55);if(bgMusic)bgMusic.volume=v2;if(v2>=.55)clearInterval(uk);},100);}
       };
     };
-  } else {
-    fetchPhrases().then(function(){setTimeout(showPhrase,5000);});
   }clearInterval(timerIv);timerIv=setInterval(function(){if(paused)return;elapsed++;var m=Math.floor(elapsed/60),s=elapsed%60;document.getElementById('timer').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;document.getElementById('prog').style.width=(elapsed/totalSecs*100)+'%';if(elapsed>=totalSecs)endSession(true);},1000);}
 
 function togglePause(){paused=!paused;document.getElementById('pause-btn').textContent=paused?'Nastavi':'Pauza';if(paused){if(currentAudio)currentAudio.pause();if(bgMusic)bgMusic.pause();clearTimeout(nextTO);}else{if(currentAudio)currentAudio.play();if(bgMusic)bgMusic.play();schedNext(2000);}}
