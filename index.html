@@ -160,7 +160,7 @@ html,body { width:100%;height:100%;background:var(--bg);color:var(--text);font-f
     <div class="q-big">Q</div>
   </div>
   <p class="gold-label">Q &nbsp;·&nbsp; Kozmička Meditacija</p>
-  <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
+  <div class="divider"><div class="d-line"></div></div>
   <button class="btn-outline" onclick="go('s-select')">ZAPOČNI MEDITACIJU</button>
 </div>
 
@@ -203,7 +203,7 @@ html,body { width:100%;height:100%;background:var(--bg);color:var(--text);font-f
     <button class="dur-btn" onclick="setDur(15,this)">15 min</button>
     <button class="dur-btn" onclick="setDur(30,this)">30 min</button>
   </div>
-  <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
+  <div class="divider"><div class="d-line"></div></div>
   <button class="btn-outline" onclick="startMed()">Započni putovanje</button>
   <button class="btn-ghost" onclick="go('s-select')" style="margin-top:.5rem">Natrag</button>
 </div>
@@ -231,7 +231,7 @@ html,body { width:100%;height:100%;background:var(--bg);color:var(--text);font-f
 <div class="screen" id="s-complete">
   <div class="complete-q">Q</div>
   <p class="complete-title">Putovanje završeno</p>
-  <div class="divider"><div class="d-line"></div><div class="d-sm"></div><div class="d-dot"></div><div class="d-sm"></div><div class="d-line"></div></div>
+  <div class="divider"><div class="d-line"></div></div>
   <p class="complete-msg" id="complete-msg"></p>
   <div class="divider"></div>
   <button class="btn-outline" onclick="go('s-select')">Nova meditacija</button>
@@ -253,7 +253,7 @@ function resizeT(){tc.width=innerWidth;tc.height=innerHeight;}resizeT();window.a
 // APP
 var session='ground',durMin=10,totalSecs,elapsed,timerIv,paused=false,phrases=[],phraseIdx=0,nextTO=null,bgMusic=null,currentAudio=null;
 var MUSIC={ground:'bilateral uzemljenje.mp3',expand:'ambience.mp3',star:'glas.mp3',neural:'nebula.mp3'};
-var META={ground:{name:'Uzemljenje',end:'Korijenjem se vrataš u sebe. Tlo je tu, uvijek.'},expand:{name:'Ekspanzija',end:'Granice su se rastopile. Ostaje samo prostor.'},star:{name:'Šum zvijezda',end:'Utopila si se u šum beskrajnog svemira.'},neural:{name:'Neuralna harmonija',end:'Tvoj um je harmoniziran. Nosiš tu ravnotežu sa sobom.'}};
+var META={ground:{name:'Uzemljenje',end:'Korijenjem se vraćaš u sebe. Tlo je tu, uvijek.'},expand:{name:'Ekspanzija',end:'Granice su se rastopile. Ostaje samo prostor.'},star:{name:'Šum zvijezda',end:'Utopila si se u šum beskrajnog svemira.'},neural:{name:'Neuralna harmonija',end:'Tvoj um je harmoniziran. Nosiš tu ravnotežu sa sobom.'}};
 var OKEY='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';
 
 function go(id){document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});var el=document.getElementById(id);if(el){el.classList.add('active');window.scrollTo(0,0);}}
@@ -270,7 +270,20 @@ function fetchPhrases(){document.getElementById('dots').classList.add('show');do
 
 function setFallback(){phrases=phrases.concat(['Zatvori oči... Udahni duboko... i pusti tijelo da se spusti.','Udahni... dva... tri... četiri... Zadrži... i izdahni polako...','Zamislaj da si u srcu svemira... Gravitacija te drži... nježno... sigurno...','Zvjezdana prašina od koje si napravljena... vraća se sada kući... u tebe.','Ja sam sigurna. Ja sam uzemljena. Ja sam dio svemira koji diše.','[TIŠINA - 60 sekundi]','Polako... postani svjesna prostora oko sebe... Zahvali sebi... otvori oči.']);}
 
-function showPhrase(){if(paused)return;if(phraseIdx>=phrases.length){fetchPhrases().then(showPhrase);return;}var phrase=phrases[phraseIdx++],el=document.getElementById('med-text');el.textContent='';setTimeout(function(){el.textContent=phrase;speak(phrase);},500);}
+function showPhrase(){
+  if(paused)return;
+  if(phraseIdx>=phrases.length) phraseIdx=0; // loop
+  var phrase=phrases[phraseIdx++];
+  var el=document.getElementById('med-text');
+  // Fade out
+  el.style.transition='opacity 1.5s';
+  el.style.opacity='0';
+  setTimeout(function(){
+    el.textContent=phrase;
+    el.style.opacity='1';
+  },1500);
+  schedNext(28000); // show each affirmation for 28 seconds
+}
 function schedNext(ms){clearTimeout(nextTO);nextTO=setTimeout(function(){if(!paused)showPhrase();},ms);}
 
 function startMed(){go('s-meditate');document.getElementById('med-label').textContent=META[session].name;totalSecs=durMin*60;elapsed=0;paused=false;phraseIdx=0;phrases=[];document.getElementById('prog').style.width='0%';document.getElementById('timer').textContent='00:00';document.getElementById('pause-btn').textContent='Pauza';document.getElementById('med-text').textContent='';startMusic();
